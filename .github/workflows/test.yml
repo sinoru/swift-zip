@@ -17,9 +17,6 @@ jobs:
       matrix:
         operating-system: [macOS-latest, macOS-11]
         swift-version: ["5.3.3", "5.4.2"]
-        include:
-          - operating-system: macOS-11
-            swift-version: "5.5"
     runs-on: ${{ matrix.operating-system }}
     steps:
       - uses: actions/checkout@v2
@@ -49,6 +46,10 @@ jobs:
           "platform=tvOS Simulator,name=Apple TV 4K,OS=latest",
           "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm,OS=latest",
         ]
+        include:
+          - operating-system: macOS-11
+            xcode-version: "13"
+            xcode-destination: "platform=iOS Simulator,name=iPhone 12 Pro,OS=latest"
     runs-on: ${{ matrix.operating-system }}
     steps:
       - uses: actions/checkout@v2
