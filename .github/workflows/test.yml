@@ -19,7 +19,7 @@ jobs:
         swift-version: ["5.3.3", "5.4.2"]
         include:
           - operating-system: macOS-11
-          - swift-version: "5.5"
+            swift-version: "5.5"
     runs-on: ${{ matrix.operating-system }}
     steps:
       - uses: actions/checkout@v2
@@ -29,11 +29,11 @@ jobs:
         with:
           swift-version: ${{ matrix.swift-version }}
       - name: Build
-        run: swift build -v
+        run: swift build
         env:
           SWIFT_VERSION: ${{ matrix.swift-version }}
       - name: Run tests
-        run: swift test -v
+        run: swift test
         env:
           SWIFT_VERSION: ${{ matrix.swift-version }}
   xcode-test:
@@ -62,6 +62,6 @@ jobs:
       - name: Resolve Package Dependencies
         run: xcodebuild -resolvePackageDependencies
       - name: Analyze
-        run: xcodebuild -scheme TwitterKit -destination '${{ matrix.xcode-destination }}' analyze
+        run: xcodebuild -scheme swift-zip -destination '${{ matrix.xcode-destination }}' analyze
       - name: Test
-        run: xcodebuild -scheme TwitterKit -destination '${{ matrix.xcode-destination }}' test
+        run: xcodebuild -scheme swift-zip -destination '${{ matrix.xcode-destination }}' test
