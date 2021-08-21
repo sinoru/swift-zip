@@ -4,11 +4,10 @@
 import PackageDescription
 
 let cMinizipCSettings: [CSetting] = [
-    .headerSearchPath("../CMinizip/include"),
     .define("HAVE_PKCRYPT"),
     .define("HAVE_WZAES"),
     .define("HAVE_LIBCOMP", .when(platforms: [.iOS, .macOS, .tvOS, .watchOS])),
-    .define("HAVE_ICONV"),
+    .define("HAVE_ICONV", .when(platforms: [.iOS, .macOS, .tvOS, .watchOS, .android, .linux])),
     .define("HAVE_BZIP2"),
 ]
 
@@ -38,33 +37,11 @@ let package = Package(
             ]),
         .target(
             name: "CMinizip",
-            dependencies: [
-                .target(name: "CMinizipLibComp", condition: .when(platforms: [.iOS, .macOS, .tvOS, .watchOS])),
-                .target(name: "CMinizipPOSIX", condition: .when(platforms: [.iOS, .macOS, .tvOS, .watchOS, .android, .linux])),
-                .target(name: "CMinizipApple", condition: .when(platforms: [.iOS, .macOS, .tvOS, .watchOS])),
-                .target(name: "CMinizipBzip2")
-            ],
-            cSettings: cMinizipCSettings),
-        .target(
-            name: "CMinizipLibComp",
-            cSettings: cMinizipCSettings),
-        .target(
-            name: "CMinizipPOSIX",
             cSettings: cMinizipCSettings,
             linkerSettings: [
-                .linkedLibrary("iconv")
-            ]),
-        .target(
-            name: "CMinizipApple",
-            cSettings: cMinizipCSettings,
-            linkerSettings: [
-                .linkedFramework("CoreFoundation"),
-                .linkedFramework("Security"),
-            ]),
-        .target(
-            name: "CMinizipBzip2",
-            cSettings: cMinizipCSettings,
-            linkerSettings: [
+                .linkedLibrary("iconv", .when(platforms: [.iOS, .macOS, .tvOS, .watchOS, .android, .linux])),
+                .linkedFramework("CoreFoundation", .when(platforms: [.iOS, .macOS, .tvOS, .watchOS])),
+                .linkedFramework("Security", .when(platforms: [.iOS, .macOS, .tvOS, .watchOS])),
                 .linkedLibrary("bz2")
             ]),
     ]
