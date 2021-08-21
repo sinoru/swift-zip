@@ -38,7 +38,7 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [macOS-11]
-        xcode-version: ["12.4", "12.5.1", "13 beta 5"]
+        xcode-version: ["12.5.1", "13 beta 5"]
     runs-on: ${{ matrix.operating-system }}
     steps:
       - uses: actions/checkout@v2
@@ -55,13 +55,13 @@ jobs:
         run: |
           xcodebuild -scheme swift-zip \
             -destination "platform=iOS Simulator,name=iPhone 12 Pro,OS=latest" \
-            -destination "platform=tvOS Simulator,name=Apple TV 4K,OS=latest" \
+            -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation),OS=latest" \
             -destination "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm,OS=latest" \
             analyze
       - name: Test
         run: |
           xcodebuild -scheme swift-zip \
             -destination "platform=iOS Simulator,name=iPhone 12 Pro,OS=latest" \
-            -destination "platform=tvOS Simulator,name=Apple TV 4K,OS=latest" \
+            -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation),OS=latest" \
             -destination "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm,OS=latest" \
             test
