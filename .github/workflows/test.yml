@@ -20,6 +20,8 @@ jobs:
     runs-on: ${{ matrix.operating-system }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
       - uses: sinoru/actions-setup-swift@v2
         with:
           swift-version: ${{ matrix.swift-version }}
@@ -47,6 +49,8 @@ jobs:
     runs-on: ${{ matrix.operating-system }}
     steps:
       - uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
       - uses: sinoru/actions-setup-xcode@v2
         with:
           xcode-version: ${{ matrix.xcode-version }}
