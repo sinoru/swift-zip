@@ -14,8 +14,13 @@
 #include "../../ThirdParty/minizip/mz_zip.c"
 #include "../../ThirdParty/minizip/mz_zip_rw.c"
 
+#ifdef HAVE_PKCRYPT
 #include "../../ThirdParty/minizip/mz_strm_pkcrypt.c"
+#endif
+
+#ifdef HAVE_WZAES
 #include "../../ThirdParty/minizip/mz_strm_wzaes.c"
+#endif
 
 #ifdef HAVE_LIBCOMP
 #include "../../ThirdParty/minizip/mz_strm_libcomp.c"

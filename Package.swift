@@ -3,14 +3,6 @@
 
 import PackageDescription
 
-let cMinizipCSettings: [CSetting] = [
-    .define("HAVE_PKCRYPT"),
-    .define("HAVE_WZAES"),
-    .define("HAVE_LIBCOMP", .when(platforms: [.iOS, .macOS, .tvOS, .watchOS])),
-    .define("HAVE_ICONV", .when(platforms: [.iOS, .macOS, .tvOS, .watchOS, .android, .linux])),
-    .define("HAVE_BZIP2"),
-]
-
 let package = Package(
     name: "swift-zip",
     products: [
@@ -37,7 +29,13 @@ let package = Package(
             ]),
         .target(
             name: "CMinizip",
-            cSettings: cMinizipCSettings,
+            cSettings: [
+                .define("HAVE_PKCRYPT"),
+                .define("HAVE_WZAES"),
+                .define("HAVE_LIBCOMP", .when(platforms: [.iOS, .macOS, .tvOS, .watchOS])),
+                .define("HAVE_ICONV", .when(platforms: [.iOS, .macOS, .tvOS, .watchOS, .android, .linux])),
+                .define("HAVE_BZIP2"),
+            ],
             linkerSettings: [
                 .linkedLibrary("iconv", .when(platforms: [.iOS, .macOS, .tvOS, .watchOS, .android, .linux])),
                 .linkedFramework("CoreFoundation", .when(platforms: [.iOS, .macOS, .tvOS, .watchOS])),
