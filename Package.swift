@@ -4,6 +4,7 @@
 import PackageDescription
 
 let cMinizipCSettings: [CSetting] = [
+    .headerSearchPath("../CMinizip/include"),
     .define("HAVE_PKCRYPT"),
     .define("HAVE_WZAES"),
     .define("HAVE_LIBCOMP", .when(platforms: [.iOS, .macOS, .tvOS, .watchOS])),
@@ -38,60 +39,30 @@ let package = Package(
         .target(
             name: "CMinizip",
             dependencies: [
-                .target(name: "CMinizip-libcomp", condition: .when(platforms: [.iOS, .macOS, .tvOS, .watchOS])),
-                .target(name: "CMinizip-posix", condition: .when(platforms: [.iOS, .macOS, .tvOS, .watchOS, .android, .linux])),
-                .target(name: "CMinizip-apple", condition: .when(platforms: [.iOS, .macOS, .tvOS, .watchOS])),
-                .target(name: "CMinizip-bzip2")
-            ],
-            sources: [
-                "mz_crypt.c",
-                "mz_os.c",
-                "mz_strm.c",
-                "mz_strm_buf.c",
-                "mz_strm_mem.c",
-                "mz_strm_split.c",
-                "mz_zip.c",
-                "mz_zip_rw.c",
-                "mz_strm_pkcrypt.c",
-                "mz_strm_wzaes.c",
-            ],
-            publicHeadersPath: ".",
-            cSettings: cMinizipCSettings),
-        .target(
-            name: "CMinizip-libcomp",
-            path: "Sources/CMinizip",
-            sources: [
-                "mz_strm_libcomp.c",
+                .target(name: "CMinizipLibComp", condition: .when(platforms: [.iOS, .macOS, .tvOS, .watchOS])),
+                .target(name: "CMinizipPOSIX", condition: .when(platforms: [.iOS, .macOS, .tvOS, .watchOS, .android, .linux])),
+                .target(name: "CMinizipApple", condition: .when(platforms: [.iOS, .macOS, .tvOS, .watchOS])),
+                .target(name: "CMinizipBzip2")
             ],
             cSettings: cMinizipCSettings),
         .target(
-            name: "CMinizip-posix",
-            path: "Sources/CMinizip",
-            sources: [
-                "mz_os_posix.c",
-                "mz_strm_os_posix.c",
-            ],
+            name: "CMinizipLibComp",
+            cSettings: cMinizipCSettings),
+        .target(
+            name: "CMinizipPOSIX",
             cSettings: cMinizipCSettings,
             linkerSettings: [
                 .linkedLibrary("iconv")
             ]),
         .target(
-            name: "CMinizip-apple",
-            path: "Sources/CMinizip",
-            sources: [
-                "mz_crypt_apple.c",
-            ],
+            name: "CMinizipApple",
             cSettings: cMinizipCSettings,
             linkerSettings: [
                 .linkedFramework("CoreFoundation"),
                 .linkedFramework("Security"),
             ]),
         .target(
-            name: "CMinizip-bzip2",
-            path: "Sources/CMinizip",
-            sources: [
-                "mz_strm_bzip.c",
-            ],
+            name: "CMinizipBzip2",
             cSettings: cMinizipCSettings,
             linkerSettings: [
                 .linkedLibrary("bz2")
