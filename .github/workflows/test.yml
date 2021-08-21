@@ -1,0 +1,60 @@
+name: Test
+
+on:
+  push:
+    paths:
+      - '.github/workflows/test.yml'
+      - '**/*.swift'
+  pull_request:
+    paths:
+      - '.github/workflows/test.yml'
+      - '**/*.swift'
+
+jobs:
+  swift-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [macOS-latest, macOS-11]
+        swift-version: ["5.3", "5.3.2"]
+    runs-on: ${{ matrix.operating-system }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: sinoru/actions-setup-swift@v2
+        with:
+          swift-version: ${{ matrix.swift-version }}
+      - name: Build
+        run: swift build -v
+        env:
+          SWIFT_VERSION: ${{ matrix.swift-version }}
+      - name: Run tests
+        run: swift test -v
+        env:
+          SWIFT_VERSION: ${{ matrix.swift-version }}
+  xcode-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [macOS-latest, macOS-11]
+        xcode-version: ["12.0.1", "12.5.1"]
+        xcode-destination: [
+          "platform=OS X,arch=x86_64",
+          "platform=OS X,arch=x86_64,variant=Mac Catalyst",
+          "platform=iOS Simulator,name=iPhone 12 Pro,OS=latest",
+          "platform=tvOS Simulator,name=Apple TV 4K,OS=latest",
+          "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm,OS=latest",
+        ]
+    runs-on: ${{ matrix.operating-system }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: sinoru/actions-setup-xcode@v2
+        with:
+          xcode-version: ${{ matrix.xcode-version }}
+          apple-id: bot@sinoru.io
+          apple-id-password: ${{ secrets.APPLE_ID_PASSWORD }}
+      - name: Resolve Package Dependencies
+        run: xcodebuild -resolvePackageDependencies
+      - name: Analyze
+        run: xcodebuild -scheme TwitterKit -destination '${{ matrix.xcode-destination }}' analyze
+      - name: Test
+        run: xcodebuild -scheme TwitterKit -destination '${{ matrix.xcode-destination }}' test
