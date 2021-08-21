@@ -44,3 +44,10 @@ let package = Package(
             ]),
     ]
 )
+
+#if swift(>=5.5)
+package.platforms = [
+    .iOS("15"),
+    .macOS("12"),
+]
+#endif
