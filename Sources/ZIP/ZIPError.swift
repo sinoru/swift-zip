@@ -9,6 +9,7 @@ import Foundation
 
 public enum ZIPError: Error {
     case unknown
+    case invalidFileURL
 }
 
 extension ZIPError {
