@@ -64,4 +64,4 @@ jobs:
             -destination "platform=iOS Simulator,name=iPhone 12 Pro,OS=latest" \
             -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation),OS=latest" \
             -destination "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm,OS=latest" \
-            test
+            test-without-building
