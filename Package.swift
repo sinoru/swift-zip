@@ -47,8 +47,8 @@ let package = Package(
 
 #if swift(>=5.5)
 package.platforms = [
-    .macOS(.v11),
-    .iOS(.v14),
+    .macOS(.v10_15),
+    .iOS(.v13),
     .watchOS(.v7),
     .tvOS(.v14)
 ]
