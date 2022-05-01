@@ -11,17 +11,21 @@ on:
       - '**/*.swift'
 
 jobs:
-  swift-test:
+  swift:
     strategy:
       fail-fast: false
       matrix:
-        operating-system: [macOS-latest, macOS-11]
-        swift-version: ["5.3.3", "5.4.2"]
+        operating-system: ["ubuntu-18.04", "ubuntu-20.04", "macos-12"]
+        swift-version: ["5.5.3", "5.6.1"]
     runs-on: ${{ matrix.operating-system }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - uses: sinoru/actions-setup-xcode@v2
+        if: ${{ startsWith(matrix.operating-system, 'macos') }}
         with:
-          submodules: 'recursive'
+          xcode-version: "13.2.1"
+          apple-id: ${{ secrets.APPLE_ID }}
+          apple-id-password: ${{ secrets.APPLE_ID_PASSWORD }}
       - uses: sinoru/actions-setup-swift@v2
         with:
           swift-version: ${{ matrix.swift-version }}
@@ -30,39 +34,34 @@ jobs:
         env:
           SWIFT_VERSION: ${{ matrix.swift-version }}
       - name: Run tests
-        run: swift test
+        run: swift test --enable-test-discovery
         env:
           SWIFT_VERSION: ${{ matrix.swift-version }}
-  xcode-test:
+
+  xcode:
     strategy:
       fail-fast: false
       matrix:
-        operating-system: [macOS-11]
-        xcode-version: ["12.5.1"]
+        operating-system: ["macos-12"]
+        xcode-version: ["13.3.1"]
+        xcode-destination: [
+          "platform=OS X,arch=x86_64",
+          "platform=OS X,arch=x86_64,variant=Mac Catalyst",
+          "platform=iOS Simulator,name=iPhone 8,OS=latest",
+          "platform=tvOS Simulator,name=Apple TV 4K (2nd generation),OS=latest",
+          "platform=watchOS Simulator,name=Apple Watch Series 5 - 44mm,OS=latest",
+        ]
     runs-on: ${{ matrix.operating-system }}
     steps:
-      - uses: actions/checkout@v2
-        with:
-          submodules: 'recursive'
+      - uses: actions/checkout@v3
       - uses: sinoru/actions-setup-xcode@v2
         with:
           xcode-version: ${{ matrix.xcode-version }}
-          apple-id: bot@sinoru.io
+          apple-id: ${{ secrets.APPLE_ID }}
           apple-id-password: ${{ secrets.APPLE_ID_PASSWORD }}
       - name: Resolve Package Dependencies
         run: xcodebuild -resolvePackageDependencies
-      - name: Build with Analyze
-        run: |
-          xcodebuild -scheme swift-zip \
-            -destination "platform=iOS Simulator,name=iPhone 12 Pro,OS=latest" \
-            -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation),OS=latest" \
-            -destination "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm,OS=latest" \
-            analyze
+      - name: Analyze
+        run: xcodebuild -scheme swift-zip -destination '${{ matrix.xcode-destination }}' analyze
       - name: Test
-        run: |
-          xcodebuild -scheme swift-zip \
-            -destination "platform=iOS Simulator,name=iPhone 12 Pro,OS=latest" \
-            -destination "platform=tvOS Simulator,name=Apple TV 4K (2nd generation),OS=latest" \
-            -destination "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm,OS=latest" \
-            -maximum-concurrent-test-simulator-destinations 2 \
-            test-without-building
+        run: xcodebuild -scheme swift-zip -destination '${{ matrix.xcode-destination }}' test
