@@ -1,3 +1,0 @@
-[submodule "Sources/CMinizip"]
-	path = ThirdParty/minizip
-	url = https://github.com/zlib-ng/minizip-ng

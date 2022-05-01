@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Cminizip-ng",
+        "repositoryURL": "https://github.com/sinoru/swift-cminizip-ng.git",
+        "state": {
+          "branch": null,
+          "revision": "481edfa5d5512bdee1a73d15ff40079b38c0b333",
+          "version": "0.0.4"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

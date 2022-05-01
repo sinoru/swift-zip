@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import CMinizip
+import Cminizip_ng
 
 #if swift(>=5.5)
 public actor ZIP {
@@ -106,5 +106,51 @@ extension ZIP {
         }
 
         return (data: Data(buffer), path: file.flatMap { String(cString: $0.pointee.filename) } ?? path)
+    }
+}
+
+extension ZIP {
+    public func extract(to url: URL) throws {
+        guard url.isFileURL else {
+            throw ZIPError.invalidFileURL
+        }
+
+        try extract(toPath: url.path)
+    }
+    
+    public func extract(toPath path: String, progressHandler: ((Double) -> Void)? = nil) throws {
+        var progressHandler = progressHandler
+
+        let progressCallback: @convention(c) (UnsafeMutableRawPointer?, UnsafeMutableRawPointer?, UnsafeMutablePointer<mz_zip_file>?, Int64) -> Int32 = { (handle, userData, fileInfo, position) in
+            var raw = UInt8(0)
+            mz_zip_reader_get_raw(handle, &raw)
+
+            guard let fileInfo = fileInfo?.pointee else {
+                fatalError()
+            }
+
+            let progress: Double
+            if (raw > 0 && fileInfo.compressed_size > 0) {
+                progress = Double(position) / Double(fileInfo.compressed_size) * 100
+            } else if (raw == 0 && fileInfo.uncompressed_size > 0) {
+                progress = Double(position) / Double(fileInfo.uncompressed_size) * 100
+            } else {
+                progress = -1
+            }
+
+            userData?.assumingMemoryBound(to: ((Double) -> Void)?.self).pointee?(progress)
+
+            return MZ_OK
+        }
+
+        mz_zip_reader_set_progress_cb(mzZIPReader, &progressHandler, progressCallback)
+        defer {
+            mz_zip_reader_set_progress_cb(mzZIPReader, nil, nil)
+        }
+
+        let error = mz_zip_reader_save_all(mzZIPReader, path.cString(using: .utf8))
+        guard error == MZ_OK || error == MZ_END_OF_LIST else {
+            throw ZIPError(minizipErrorCode: error)
+        }
     }
 }
