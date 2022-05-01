@@ -5,10 +5,12 @@ on:
     paths:
       - '.github/workflows/test.yml'
       - '**/*.swift'
+      - 'Package.resolved'
   pull_request:
     paths:
       - '.github/workflows/test.yml'
       - '**/*.swift'
+      - 'Package.resolved'
 
 jobs:
   swift:
