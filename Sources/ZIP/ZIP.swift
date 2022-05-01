@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import CMinizip
+import Cminizip_ng
 
 #if swift(>=5.5)
 public actor ZIP {
