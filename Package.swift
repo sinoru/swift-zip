@@ -41,9 +41,9 @@ let package = Package(
 
 #if swift(>=5.5) && swift(<5.6)
 package.platforms = [
-    .macOS("12"),
-    .iOS("15"),
-    .watchOS("8"),
-    .tvOS("15"),
+    .macOS(.v10_15),
+    .iOS(.v13),
+    .watchOS(.v7),
+    .tvOS(.v14)
 ]
 #endif
