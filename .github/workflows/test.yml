@@ -84,8 +84,15 @@ jobs:
             xcode-destination: "platform=OS X,arch=x86_64,variant=Mac Catalyst"
           - xcode-destination-platform: "tvOS"
             xcode-destination: "platform=tvOS Simulator,name=Apple TV,OS=latest"
-          - xcode-destination-platform: "watchOS"
+          - xcode-version: "13.2.1"
+            xcode-destination-platform: "watchOS"
             xcode-destination: "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm,OS=latest"
+          - xcode-version: "13.4.1"
+            xcode-destination-platform: "watchOS"
+            xcode-destination: "platform=watchOS Simulator,name=Apple Watch Series 6 - 44mm,OS=latest"
+          - xcode-version: "14.0.1"
+            xcode-destination-platform: "watchOS"
+            xcode-destination: "platform=watchOS Simulator,name=Apple Watch Series 8 (45mm),OS=latest"
     runs-on: ${{ matrix.operating-system }}
     steps:
       - uses: actions/checkout@v2
