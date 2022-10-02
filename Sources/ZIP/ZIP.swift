@@ -30,16 +30,16 @@ public class ZIP {
 
 extension ZIP {
     #if swift(>=5.5)
-    public convenience init(url: URL) async throws {
+    public init(url: URL) async throws {
         self.init()
 
-        try await open(url: url)
+        try open(url: url)
     }
     
-    public convenience init(data: Data) async throws {
+    public init(data: Data) async throws {
         self.init()
         
-        try await open(data: data)
+        try open(data: data)
     }
     #else
     public convenience init(url: URL) throws {
