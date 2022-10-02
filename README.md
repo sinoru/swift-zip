@@ -13,7 +13,7 @@ Below you'll find all you need to know to get started.
 `swift-zip` is designed for Swift 5.3 and later. To depend on the zip package, you need to declare your dependency in your `Package.swift`:
 
 ```swift
-.package(url: "https://github.com/sinoru/swift-zip.git", from: "0.0.1"),
+.package(url: "https://github.com/sinoru/swift-zip.git", from: "0.0.5"),
 ```
 
 and to your application/library target, add `"ZIP"` to your `dependencies`, e.g. like this:
