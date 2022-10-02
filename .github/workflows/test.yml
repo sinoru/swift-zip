@@ -20,12 +20,17 @@ jobs:
         operating-system: ["ubuntu-18.04", "ubuntu-20.04", "macos-12"]
         swift-version: ["5.5.3", "5.6.3", "5.7"]
         include:
+          - operating-system: "ubuntu-22.04"
+            swift-version: "5.7"
           - swift-version: "5.5.3"
             xcode-version: "13.2.1"
           - swift-version: "5.6.3"
             xcode-version: "13.4.1"
           - swift-version: "5.7"
             xcode-version: "14.0.1"
+        exclude:
+          - operating-system: "ubuntu-18.04"
+            swift-version: "5.7"
     runs-on: ${{ matrix.operating-system }}
     steps:
       - uses: actions/checkout@v3
