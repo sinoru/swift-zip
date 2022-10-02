@@ -70,7 +70,11 @@ jobs:
           "watchOS",
         ]
         include:
+          - xcode-version: "13.2.1"
+            operating-system: "macos-11"
           - xcode-version: "13.4.1"
+            operating-system: "macos-12"
+          - xcode-version: "14.0.1"
             operating-system: "macos-12"
           - xcode-destination-platform: "iOS"
             xcode-destination: "platform=iOS Simulator,name=iPhone 12 Pro,OS=latest"
