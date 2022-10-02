@@ -12,6 +12,14 @@ import Cminizip_ng
 public actor ZIP {
     var mzZIPReader: UnsafeMutableRawPointer? = nil
 
+    public init(url: URL) async throws {
+        try open(url: url)
+    }
+
+    public init(data: Data) async throws {
+        try open(data: data)
+    }
+
     deinit {
         mz_zip_reader_close(mzZIPReader)
         mz_zip_reader_delete(&mzZIPReader)
@@ -20,6 +28,14 @@ public actor ZIP {
 #else
 public class ZIP {
     var mzZIPReader: UnsafeMutableRawPointer? = nil
+
+    public init(url: URL) throws {
+        try open(url: url)
+    }
+
+    public init(data: Data) throws {
+        try open(data: data)
+    }
     
     deinit {
         mz_zip_reader_close(mzZIPReader)
@@ -29,32 +45,6 @@ public class ZIP {
 #endif
 
 extension ZIP {
-    #if swift(>=5.5)
-    public init(url: URL) async throws {
-        self.init()
-
-        try open(url: url)
-    }
-    
-    public init(data: Data) async throws {
-        self.init()
-        
-        try open(data: data)
-    }
-    #else
-    public convenience init(url: URL) throws {
-        self.init()
-
-        try open(url: url)
-    }
-    
-    public convenience init(data: Data) throws {
-        self.init()
-        
-        try open(data: data)
-    }
-    #endif
-    
     func open(url: URL) throws {
         mz_zip_reader_create(&mzZIPReader)
         
